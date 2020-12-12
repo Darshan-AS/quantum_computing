@@ -10,11 +10,11 @@
     }
 
     operation Encode(qubit : Qubit, data : Bool []) : Unit {
-        if (data[1]) {
+        if (data[0]) {
             Z(qubit);
         }
 
-        if (data[0]) {
+        if (data[1]) {
             X(qubit);
         }
     }
@@ -23,7 +23,7 @@
         CNOT(qubit1, qubit2);
         H(qubit1);
 
-        return [ResultAsBool(M(qubit2)), ResultAsBool(M(qubit1))];
+        return [ResultAsBool(M(qubit1)), ResultAsBool(M(qubit2))];
     }
 
     @EntryPoint()
@@ -31,7 +31,7 @@
         using ((aliceQubit, bobQubit) = (Qubit(), Qubit())) {
             Entangle(aliceQubit, bobQubit);
 
-            let dataToBeSent = [false, true];
+            let dataToBeSent = [true, true];
             Encode(aliceQubit, dataToBeSent);
 
             let dataRecieved = Decode(aliceQubit, bobQubit);
@@ -41,6 +41,7 @@
             } else {
                 Message("Error in communication");
             }
+            Reset(aliceQubit); Reset(bobQubit);
         }
     }
 }
