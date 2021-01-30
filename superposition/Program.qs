@@ -17,13 +17,8 @@
     operation MeasureSuperpositionNTimes(n : Int) : (Int, Int) {
         mutable oneCount = 0;
         for (i in 0..n) {
-            using (q = Qubit()) {
-                H(q);
-                let result = M(q);
-                Reset(q);
-
-                set oneCount += (result == One) ? 1 | 0;
-            }
+            let result = MeasureSuperposition();
+            set oneCount += (result == One) ? 1 | 0;
         }
         return (n - oneCount, oneCount);
     }
